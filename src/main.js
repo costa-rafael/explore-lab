@@ -58,3 +58,49 @@ const expirationDatePattern = {
 
 const expirationDateMasked = IMask(expirationDate, expirationDatePattern)
 
+//Visa
+//Inica com 4 seguido de + 15 digitos
+//412345 12345 12345 
+//^4/{0-15}
+
+//master
+// inicia com 5, seguido de um digito entre 1 e 5, seguido de 0 ou 2 digitos
+//ou
+// inicia com 22, seguido de um digito entre 2 e 9, seguido de 0 ou 1 digito
+//ou
+//inicia com 2, seguido de um digito entre 3 e7, seguido de 0 ou 2 digitos
+// seguido de mais 12 digitos
+
+
+const cardNumber = document.querySelector("#card-number")
+
+const cardNumerPattern = {
+  mask: [
+    {
+      mask: "0000 0000 0000 0000",
+      regex: /^4\d{0,15}/,
+      cardtype: "visa",
+    },
+    {
+      mask: "0000 0000 0000 0000",
+      regex: /(^5[1-5]\d{0,2}|^22[2-9]\d|^2[3-7]\d{0,2})\d{0,12}/,
+      cardtype: "master",
+    },
+    {
+      mask: "0000 0000 0000 0000",
+      cardtype: "nubank",
+    },
+    {
+      mask: "0000 0000 0000 0000",
+      cardtype: "default",
+    },
+  ],
+  dispatch: function (appended, dynamicMasked) {
+    const number = (dynamicMasked.value + appended).replace(/\D/g, "")
+    const foundMask = dynamicMasked.compiledMask.find(function(item{
+      return number.match(item.regex)
+    }))
+  },
+}
+
+const cardNumberMasked = IMask(cardNumber, cardNumerPattern)
